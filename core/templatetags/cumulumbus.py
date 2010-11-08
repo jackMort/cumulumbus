@@ -53,13 +53,10 @@ def render_post( context, post ):
 	for key, ct in types.items():
 		try:
 			object = getattr( post, key )
-			
 			return { 
 				'template': '%s/display_%s.html' % ( ct.app_label, ct.model ),
 				'post': post,
 				'object': object 
 			}
-			
-			return context
-		except Exception, e:
-			print e
+		except:
+			pass
