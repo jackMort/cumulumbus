@@ -19,7 +19,7 @@ import time
 from datetime import datetime
 
 def to_timestamp( date ):
-	return int( time.mktime( date.timetuple() ) * 100 )
+	return int( time.mktime( date.timetuple() ) )
 
 def from_timestamp( timestamp ):
 	return datetime.fromtimestamp( int( timestamp ) )

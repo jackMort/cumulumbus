@@ -24,8 +24,12 @@ class BaseFetcher( object ):
 		self.serviceAccount = serviceAccount
 
 	def run( self ):
+		# store date to catch elements added 
+		# while import is in proggress
+		last_import = datetime.now()
+		
 		self.fetch( to_timestamp( self.serviceAccount.last_import ) )
-		self.serviceAccount.last_import = datetime.now()
+		self.serviceAccount.last_import = last_import
 		self.serviceAccount.save()
 
 	def fetch( self, since=None ):

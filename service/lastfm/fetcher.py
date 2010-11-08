@@ -35,7 +35,9 @@ class LastfmFetcher( BaseFetcher ):
 		for friend in friends:
 			try:
 				recent_tracks = friend.get_recent_tracks( since=since )
+				print "-- %s [%d]. %d items" % ( friend, since, len( recent_tracks ) )
 				for recent in recent_tracks:
+					print "  `-- %s [%s]" % ( recent.track, from_timestamp( recent.timestamp ) )
 					LastfmFriendListen.objects.create(
 						account = self.serviceAccount,
 						date_added = from_timestamp( recent.timestamp ),

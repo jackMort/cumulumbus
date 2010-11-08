@@ -18,7 +18,7 @@
 class Service( object ):
 	name = None
 	description = None
-	actions = []
+	fetchers = []
 
 	@property
 	def icon( self ):
