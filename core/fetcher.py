@@ -15,10 +15,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from datetime import datetime
+
+from cumulumbus.core.utils import to_timestamp
 
 class BaseFetcher( object ):
 	def __init__( self, serviceAccount ):
 		self.serviceAccount = serviceAccount
+
+	def run( self ):
+		self.fetch( to_timestamp( self.serviceAccount.last_import ) )
+		self.serviceAccount.last_import = datetime.now()
+		self.serviceAccount.save()
 
 	def fetch( self, since=None ):
 		pass

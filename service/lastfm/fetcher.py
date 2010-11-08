@@ -19,8 +19,9 @@ from django.conf import settings
 
 import pylast
 
+from cumulumbus.core.utils import from_timestamp, to_timestamp
 from cumulumbus.core.fetcher import BaseFetcher
-from cumulumbus.service.lastfm.models import LastfmAccount, LastfmPost
+from cumulumbus.service.lastfm.models import LastfmAccount, LastfmFriendListen
 
 class LastfmFetcher( BaseFetcher ):
 	def __init__( self, serviceAccount ):
@@ -33,9 +34,13 @@ class LastfmFetcher( BaseFetcher ):
 		friends = lasftmUser.get_friends()
 		for friend in friends:
 			try:
-				recent_tracks = friend.get_recent_tracks()
+				recent_tracks = friend.get_recent_tracks( since=since )
 				for recent in recent_tracks:
-					if since is None or recent.timestamp > since:
-						
+					LastfmFriendListen.objects.create(
+						account = self.serviceAccount,
+						date_added = from_timestamp( recent.timestamp ),
+						friend = str( friend ), # TODO: class LastfmUser
+						track = recent.track # TODO: class LastfmTrack
+					)
 			except pylast.WSError:
 				pass

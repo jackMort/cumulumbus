@@ -15,14 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from django.db import models
-from django.utils.translation import ugettext_lazy as _
+import time
+from datetime import datetime
 
-from cumulumbus.core.models import ServiceAccount, Post
+def to_timestamp( date ):
+	return int( time.mktime( date.timetuple() ) * 100 )
 
-class LastfmAccount( ServiceAccount ):
-	username = models.CharField( _( "username" ), max_length = 100 )
-
-class LastfmFriendListen( Post ):
-	friend = models.CharField( _( "friend" ), max_length = 100 )
-	track = models.CharField( _( "track" ), max_length = 200 )
+def from_timestamp( timestamp ):
+	return datetime.fromtimestamp( int( timestamp ) )

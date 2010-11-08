@@ -15,14 +15,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.conf import settings
 
-from cumulumbus.core.models import ServiceAccount, Post
+import feedparser
 
-class LastfmAccount( ServiceAccount ):
-	username = models.CharField( _( "username" ), max_length = 100 )
+from cumulumbus.core.fetcher import BaseFetcher
+from cumulumbus.service.rss.models import RSSAccount
 
-class LastfmFriendListen( Post ):
-	friend = models.CharField( _( "friend" ), max_length = 100 )
-	track = models.CharField( _( "track" ), max_length = 200 )
+class RSSFetcher( BaseFetcher ):
+	def __init__( self, serviceAccount ):
+		assert isinstance( serviceAccount, RSSAccount )
+		super( LastfmFetcher, self ).__init__( serviceAccount )
+	
+	def fetch( self, since=None ):
+		pass

@@ -20,9 +20,8 @@ from django.utils.translation import ugettext_lazy as _
 
 from cumulumbus.core.models import ServiceAccount, Post
 
-class LastfmAccount( ServiceAccount ):
-	username = models.CharField( _( "username" ), max_length = 100 )
+class RSSAccount( ServiceAccount ):
+	url = models.URLField( _( "url" ) )
 
-class LastfmFriendListen( Post ):
-	friend = models.CharField( _( "friend" ), max_length = 100 )
-	track = models.CharField( _( "track" ), max_length = 200 )
+class RSSEntry( Post ):
+	title = models.CharField( _( "title" ), max_length=200 )

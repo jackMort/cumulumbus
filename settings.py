@@ -105,6 +105,7 @@ LANGUAGES = (
 AUTH_PROFILE_MODULE = 'cumulumbus.core.models.UserProfile'
 
 SERVICES = (
+	'cumulumbus.service.rss.RSSService',
 	'cumulumbus.service.soup.SoupService',
 	'cumulumbus.service.lastfm.LastfmService',
 )
@@ -132,6 +133,7 @@ INSTALLED_APPS = (
 
 	'cumulumbus.core',
 
+	'cumulumbus.service.rss',
 	'cumulumbus.service.soup',
 	'cumulumbus.service.lastfm',
 )

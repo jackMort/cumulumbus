@@ -27,6 +27,7 @@ class UserProfile( models.Model ):
 
 class ServiceAccount( models.Model ):
 	service = models.CharField( _( "service" ), max_length = 100, choices = servicehook_pool.get_servicehooks() )
+	last_import = models.DateTimeField( _( "last import" ), null=True, blank=True )
 
 class Post( models.Model ):
 	account = models.ForeignKey( ServiceAccount, verbose_name = _( "service account" ) )
