@@ -1,0 +1,17 @@
+<div id="{{ post.id }}" class="post col4">
+	<div class="post-header">
+		<div class="post-actions" style="float: right">
+			<a class="post-close" href="#">x</a>
+		</div>
+		<h4>{{ post.date_added }}</h4>
+	</div>
+	<div class="post-body">
+		<h4><a href="{{ object.url }}">{{ object.title }}</a></h4>
+		<p>
+			{% if object.image_url %}
+				<img src="{{ object.image_url }}" style="float: left; margin: 5px 10px;"/>
+			{% endif %}
+			{{ object.body }}
+		</p>
+	</div>
+</div>

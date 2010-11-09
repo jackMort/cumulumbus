@@ -20,9 +20,30 @@ from django.utils.translation import ugettext_lazy as _
 
 from cumulumbus.core.models import ServiceAccount, Post
 
+class LastfmElement( models.Model ):
+	mbid = models.CharField( _( "mbid" ), max_length = 255 )
+	url = models.URLField( _( "url" ) )
+	image_url = models.CharField( _( "image url" ), max_length = 255, blank = True, null = True )
+
+	class Meta:
+		abstract = True
+
 class LastfmAccount( ServiceAccount ):
 	username = models.CharField( _( "username" ), max_length = 100 )
 
+class LastfmUser( LastfmElement ):
+	username = models.CharField( _( "username" ), max_length = 100 )
+
+class LastfmArtist( LastfmElement ):
+	name = models.CharField( _( "name" ), max_length = 255 )
+
+class LastfmTrack( LastfmElement ):
+	title = models.CharField( _( "track" ), max_length = 255 )
+	artist = models.ForeignKey( LastfmArtist, verbose_name = _( "artist" ) )
+	duration = models.CharField( _( "duration" ), max_length = 50 )
+	streamable = models.BooleanField( _( "streamable" ) )
+
 class LastfmFriendListen( Post ):
-	friend = models.CharField( _( "friend" ), max_length = 100 )
-	track = models.CharField( _( "track" ), max_length = 200 )
+	friend = models.ForeignKey( LastfmUser, verbose_name = _( "friend" ) )
+	track = models.ForeignKey( LastfmTrack, verbose_name = _( "track" ) )
+

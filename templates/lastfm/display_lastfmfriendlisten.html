@@ -1,9 +1,21 @@
-<div class="post small" style="float: left; width: 400px; border: 1px solid black; padding: 2px; margin: 2px">
+<div id="{{ post.id }}" class="post col3" style="background: #111111; color: #ffffff">
 	<div class="post-header">
-	<div class="post-actions" style="float: right">
-		<a href="#">x</a>
+		<div class="post-actions" style="float: right">
+			<a class="post-close" href="#">x</a>
+		</div>
+		<h4>{{ post.date_added }}</h4>
 	</div>
-	<h3>{{ post.date_added }}</h3>
+	<div class="post-body">
+		<h4 style="float: right; text-align: right;">
+			<a href="{{ object.artist.url }}">{{ object.track.artist.name }}</a>
+			<br/>
+			<a href="{{ object.track.url }}">{{ object.track.title }}</a>
+		</h4>
+		{% if object.track.image_url %}
+		<img src="{{ object.track.image_url }}" alt=[{{ object.track.title }}]/>
+		{% endif %}
 	</div>
-	<p><b>{{ object.friend }}</b> - <span>{{ object.track }}</span></p>
+	<div class="post-footer clear">
+		<a href="{{ object.friend.url }}">{{ object.friend.username }}</a>
+	</div>
 </div>

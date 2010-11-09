@@ -19,7 +19,14 @@ import time
 from datetime import datetime
 
 def to_timestamp( date ):
-	return int( time.mktime( date.timetuple() ) )
+	if isinstance( date, time.struct_time ):
+		object = date
+	else:
+		object = date.timetuple()
+	return int( time.mktime( object ) )
 
 def from_timestamp( timestamp ):
 	return datetime.fromtimestamp( int( timestamp ) )
+
+def from_timetuple( timetuple ):
+	return datetime.fromtimestamp( time.mktime( timetuple ) )

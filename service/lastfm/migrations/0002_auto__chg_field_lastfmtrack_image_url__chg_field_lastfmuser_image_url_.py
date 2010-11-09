@@ -8,71 +8,26 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Adding model 'LastfmAccount'
-        db.create_table('lastfm_lastfmaccount', (
-            ('serviceaccount_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['core.ServiceAccount'], unique=True, primary_key=True)),
-            ('username', self.gf('django.db.models.fields.CharField')(max_length=100)),
-        ))
-        db.send_create_signal('lastfm', ['LastfmAccount'])
+        # Changing field 'LastfmTrack.image_url'
+        db.alter_column('lastfm_lastfmtrack', 'image_url', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True))
 
-        # Adding model 'LastfmUser'
-        db.create_table('lastfm_lastfmuser', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('mbid', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('url', self.gf('django.db.models.fields.URLField')(max_length=200)),
-            ('image_url', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('username', self.gf('django.db.models.fields.CharField')(max_length=100)),
-        ))
-        db.send_create_signal('lastfm', ['LastfmUser'])
+        # Changing field 'LastfmUser.image_url'
+        db.alter_column('lastfm_lastfmuser', 'image_url', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True))
 
-        # Adding model 'LastfmArtist'
-        db.create_table('lastfm_lastfmartist', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('mbid', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('url', self.gf('django.db.models.fields.URLField')(max_length=200)),
-            ('image_url', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
-        ))
-        db.send_create_signal('lastfm', ['LastfmArtist'])
-
-        # Adding model 'LastfmTrack'
-        db.create_table('lastfm_lastfmtrack', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('mbid', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('url', self.gf('django.db.models.fields.URLField')(max_length=200)),
-            ('image_url', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('artist', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['lastfm.LastfmArtist'])),
-            ('duration', self.gf('django.db.models.fields.CharField')(max_length=50)),
-            ('streamable', self.gf('django.db.models.fields.BooleanField')(default=False, blank=True)),
-        ))
-        db.send_create_signal('lastfm', ['LastfmTrack'])
-
-        # Adding model 'LastfmFriendListen'
-        db.create_table('lastfm_lastfmfriendlisten', (
-            ('post_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['core.Post'], unique=True, primary_key=True)),
-            ('friend', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['lastfm.LastfmUser'])),
-            ('track', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['lastfm.LastfmTrack'])),
-        ))
-        db.send_create_signal('lastfm', ['LastfmFriendListen'])
+        # Changing field 'LastfmArtist.image_url'
+        db.alter_column('lastfm_lastfmartist', 'image_url', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True))
 
 
     def backwards(self, orm):
         
-        # Deleting model 'LastfmAccount'
-        db.delete_table('lastfm_lastfmaccount')
+        # Changing field 'LastfmTrack.image_url'
+        db.alter_column('lastfm_lastfmtrack', 'image_url', self.gf('django.db.models.fields.CharField')(max_length=255))
 
-        # Deleting model 'LastfmUser'
-        db.delete_table('lastfm_lastfmuser')
+        # Changing field 'LastfmUser.image_url'
+        db.alter_column('lastfm_lastfmuser', 'image_url', self.gf('django.db.models.fields.CharField')(max_length=255))
 
-        # Deleting model 'LastfmArtist'
-        db.delete_table('lastfm_lastfmartist')
-
-        # Deleting model 'LastfmTrack'
-        db.delete_table('lastfm_lastfmtrack')
-
-        # Deleting model 'LastfmFriendListen'
-        db.delete_table('lastfm_lastfmfriendlisten')
+        # Changing field 'LastfmArtist.image_url'
+        db.alter_column('lastfm_lastfmartist', 'image_url', self.gf('django.db.models.fields.CharField')(max_length=255))
 
 
     models = {
@@ -98,7 +53,7 @@ class Migration(SchemaMigration):
         'lastfm.lastfmartist': {
             'Meta': {'object_name': 'LastfmArtist'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'image_url': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'image_url': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'mbid': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'url': ('django.db.models.fields.URLField', [], {'max_length': '200'})
@@ -114,7 +69,7 @@ class Migration(SchemaMigration):
             'artist': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['lastfm.LastfmArtist']"}),
             'duration': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'image_url': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'image_url': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'mbid': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'streamable': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
@@ -123,7 +78,7 @@ class Migration(SchemaMigration):
         'lastfm.lastfmuser': {
             'Meta': {'object_name': 'LastfmUser'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'image_url': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'image_url': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'mbid': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'url': ('django.db.models.fields.URLField', [], {'max_length': '200'}),
             'username': ('django.db.models.fields.CharField', [], {'max_length': '100'})

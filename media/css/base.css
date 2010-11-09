@@ -74,10 +74,49 @@ figure img {width: 100%;}
 ::selection 	 {background: rgb(255,255,0);}
 ::-moz-selection {background: rgb(255,255,0);}
 
+.clear { clear: both; }
+
+a { color: #999; text-decoration: none; padding: 0 2px; }
+a:hover { 
+	color: #fff; background: #999; 
+		-webkit-border-radius: 2px;
+		-moz-border-radius: 2px;
+		border-radius: 2px; 
+}
 
 
+.post {
+	margin: 5px;
+	padding: 5px;
+	background: #D8D5D2;
+	font-size: 11px;
+	float: left;
+		-webkit-border-radius: 5px;
+		-moz-border-radius: 5px;
+		border-radius: 5px;
 
-a { color: black; text-decoration: none; }
+		-moz-box-shadow: 2px 2px 5px #999;
+		-webkit-box-shadow: 2px 2px 5px #999;
+		box-shadow: 2px 2px 5px #999;
+	}
 
+.post img {
+	height: 50px;
+	border: 1px solid #fff;
+}
+
+.col1 { width: 80px; }
+.col2 { width: 180px; }
+.col3 { width: 280px; }
+.col4 { width: 380px; }
+.col5 { width: 480px; }
+
+.post-body {
+	margin: 2px 0;
+}
+
+.post-footer {
+	text-align: right;
+}
 
 .post-actions { padding: 0 3px; }

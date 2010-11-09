@@ -1,8 +1,42 @@
 {% extends "base.html" %}
+
 {% load cumulumbus %}
 
+{% block head_extra %}
+	<script src="{{ MEDIA_URL}}js/jquery.masonry.min.js"></script>
+	<script type="text/javascript">
+		jQuery( window ).load( function() {
+			$wall = jQuery( '.posts' )
+			$wall.masonry({ 
+				columnWidth: 50,
+				itemSelector: '.post', 
+				animate: true,
+				animateOptions: {
+					duration: 1000,
+					queue: false
+				}
+			})
+			// mark as readed
+			jQuery( '.post' ).click( function() {
+				var self = $( this ), id = self.attr( 'id' )
+				jQuery.get( '/readed/' + id, function( data ) {
+					// TODO: json, and messaging
+					if ( data == 'OK' ) {
+						self.remove()
+						$wall.masonry()
+					} else {
+						alert( 'ERROR: while processing ...' )
+					}
+				})
+			})
+		})
+	</script>
+{% endblock %}
+
 {% block content %}
+	<div class="posts">
 	{% for item in items %}
 		{% render_post item %}
 	{% endfor %}
+	</div>
 {% endblock %}

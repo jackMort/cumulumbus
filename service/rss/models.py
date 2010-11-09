@@ -25,3 +25,6 @@ class RSSAccount( ServiceAccount ):
 
 class RSSEntry( Post ):
 	title = models.CharField( _( "title" ), max_length=200 )
+	url = models.URLField( _( "url" ) )
+	image_url = models.CharField( _( "image url" ), max_length = 255, blank = True, null = True )
+	body = models.TextField( _( "body" ), blank = True, null = True )

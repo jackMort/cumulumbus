@@ -26,10 +26,13 @@ class BaseFetcher( object ):
 	def run( self ):
 		# store date to catch elements added 
 		# while import is in proggress
-		last_import = datetime.now()
-		
-		self.fetch( to_timestamp( self.serviceAccount.last_import ) )
-		self.serviceAccount.last_import = last_import
+		next_import = datetime.now()
+
+		last_import = to_timestamp( self.serviceAccount.last_import ) \
+				if self.serviceAccount.last_import else None
+
+		self.fetch( last_import )
+		self.serviceAccount.last_import = next_import
 		self.serviceAccount.save()
 
 	def fetch( self, since=None ):
