@@ -5,4 +5,5 @@ django_pagination>=1.0.7
 django_notification>=0.1.5
 django_extensions>=0.5
 pylast>=0.4.30
+feedparser>=4.1
 -e git+git://github.com/SmileyChris/easy-thumbnails.git#egg=easy-thumbnails
