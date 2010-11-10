@@ -15,26 +15,30 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from threading import Thread, Lock
 from datetime import datetime
 
 from cumulumbus.core.utils import to_timestamp
 from cumulumbus.core.models import post_imported
 
-class BaseFetcher( object ):
+class BaseFetcher( Thread ):
 	def __init__( self, serviceAccount ):
+		Thread.__init__( self )
 		self.serviceAccount = serviceAccount
 
 	def run( self ):
+		lock = Lock()
+		lock.acquire()
 		# store date to catch elements added 
 		# while import is in proggress
 		next_import = datetime.now()
 
 		last_import = to_timestamp( self.serviceAccount.last_import ) -1000 \
 				if self.serviceAccount.last_import else None
-
 		self.fetch( last_import )
 		self.serviceAccount.last_import = next_import
 		self.serviceAccount.save()
+		lock.release()
 
 	def fetch( self, since=None ):
 		pass

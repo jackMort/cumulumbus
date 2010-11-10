@@ -6,7 +6,6 @@
 
 {% block head_extra %}
 	<script src="{{ MEDIA_URL}}js/jquery.masonry.min.js"></script>
-	<script type="text/javascript" src="/media/js/orbited/Orbited.js"></script>
 	<script type="text/javascript" src="http://jackmort.hosted.hookbox.org/static/hookbox.js"></script>
 	<script type="text/javascript">
 		jQuery( window ).load( function() {
@@ -15,7 +14,7 @@
 				columnWidth: 50,
 				itemSelector: '.post', 
 				animate: true,
-				appendedContent: undefined,
+				saveOptions: false,
 				animateOptions: {
 					duration: 1000,
 					queue: false

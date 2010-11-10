@@ -49,7 +49,7 @@ class LastfmFetcher( BaseFetcher ):
 					)
 					friend_user.save()
 
-				recent_tracks = friend.get_recent_tracks( since=since, limit=5 )
+				recent_tracks = friend.get_recent_tracks( since=since, limit=15 )
 				print "-- %s [%s]. %d items" % ( friend, since if since else "ALL_TIME", len( recent_tracks ) )
 				for recent in recent_tracks:
 					print "  `-- %s [%s]" % ( recent.track, from_timestamp( recent.timestamp ) )
