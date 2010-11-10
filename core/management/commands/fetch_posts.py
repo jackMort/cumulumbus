@@ -15,13 +15,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-class Service( object ):
-	name = None
-	description = None
+from django.core.management.base import BaseCommand, CommandError
 
-	@property
-	def icon( self ):
-		return "services/%s/icon.png" % self.name
-	
-	def get_fetchers( self ):
-		return []
+from cumulumbus.core.models import ServiceAccount
+from cumulumbus.core.servicehook_pool import servicehook_pool
+
+class Command( BaseCommand ):
+
+	def handle( self, *arg, **options ):
+		for account in ServiceAccount.objects.all():
+			service = servicehook_pool.get_servicehook( account.service )
+			fetchers = service().get_fetchers()
+			
+			for fetcher_cls in fetchers:
+				fetcher = fetcher_cls( account )
+				fetcher.start()

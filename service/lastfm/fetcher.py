@@ -25,7 +25,8 @@ from cumulumbus.service.lastfm.models import *
 
 class LastfmFetcher( BaseFetcher ):
 	def __init__( self, serviceAccount ):
-		assert isinstance( serviceAccount, LastfmAccount )
+		if not isinstance( serviceAccount, LastfmAccount ):
+			serviceAccount = serviceAccount.lastfmaccount
 		super( LastfmFetcher, self ).__init__( serviceAccount )
 	
 	def fetch( self, since=None ):

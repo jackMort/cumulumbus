@@ -26,7 +26,8 @@ from cumulumbus.service.rss.models import RSSAccount, RSSEntry
 
 class RSSFetcher( BaseFetcher ):
 	def __init__( self, serviceAccount ):
-		assert isinstance( serviceAccount, RSSAccount )
+		if not isinstance( serviceAccount, RSSAccount ):
+			serviceAccount = serviceAccount.rssaccount
 		super( RSSFetcher, self ).__init__( serviceAccount )
 	
 	def fetch( self, since=None ):
