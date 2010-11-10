@@ -34,26 +34,31 @@
 			};
 
 			$wall.masonry( masonry_options )
+			
+			var make_connection = function() {
+				var conn = hookbox.connect('http://jackmort.hosted.hookbox.org');
+				// TODO: messaging ...
+				// conn.onOpen = function() { alert("connection established!"); };
+				conn.onError = function(err) { alert("connection failed: " + err.msg); };
+				conn.onClose = function() { make_connection() };
 
-			var conn = hookbox.connect('http://jackmort.hosted.hookbox.org');
-			// TODO: messaging ...
-			// conn.onOpen = function() { alert("connection established!"); };
-			// conn.onError = function(err) { alert("connection failed: " + err.msg); };
+				var subscription = null;
+				conn.onSubscribed = function(channelName, _subscription) {
+					subscription = _subscription;                
+					subscription.onPublish = function( frame ) {
+						id = frame['payload']['id']
+						jQuery.get( '/post/' + id, function( data ) {
+							$item = $( data )
+							$wall.append( $item )
+							$item.click( delete_post )
+							$wall.masonry( { appendedContent: $item } )
+						})
+					};  
+				};
+				conn.subscribe( "posts" );
+			}
 
-			var subscription = null;
-			conn.onSubscribed = function(channelName, _subscription) {
-				subscription = _subscription;                
-				subscription.onPublish = function( frame ) {
-					id = frame['payload']['id']
-					jQuery.get( '/post/' + id, function( data ) {
-						$item = $( data )
-						$wall.append( $item )
-						$item.click( delete_post )
-						$wall.masonry( { appendedContent: $item } )
-					})
-				};  
-			};
-			conn.subscribe( "posts" );
+			make_connection();
 
 			// mark as readed
 			jQuery( '.post' ).click( delete_post )
