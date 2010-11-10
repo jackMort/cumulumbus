@@ -7,39 +7,22 @@
 {% block head_extra %}
 	<script src="{{ MEDIA_URL}}js/jquery.masonry.min.js"></script>
 	<script type="text/javascript" src="/media/js/orbited/Orbited.js"></script>
-		<script type="text/javascript">
-			Orbited.settings.port = 13131313
-			Orbited.settings.hostname = "127.0.0.1"
-			TCPSocket = Orbited.TCPSocket
-		</script>
-		<script type="text/javascript">
-			document.domain = document.domain;
-		</script>
-		<script type="text/javascript" src="/media/js/orbited/stomp.js"></script>
-		<script type="text/javascript">
-			$( document ).ready( function() {
-				stomp = new STOMPClient();
-				stomp.onopen = function() { console.log( "opening stomp client" ) };
-				stomp.onclose = function( c ) { console.log( "lost connection, code: " + c ) };
-				stomp.onerror = function( e ) { console.log( "error: " + e ) };
-				stomp.onerrorframe = function( f ) { console.log( "error frame: " + f.body ) };
-				stomp.onconnectedframe = function() { 
-					console.log( "connected, subscribing ..." )
-					stomp.subscribe( "/posts" )
-				};
-				stomp.onmessageframe = function( f ) {
-					console.log( f );
-					var destination = f.headers.destination
-					var subjects = [];
-					var cls = subjects[ destination ]();
-
-
-				};
-				stomp.connect( 'localhost', 13131314 )
-			});
-	</script>
+	<script type="text/javascript" src="http://jackmort.hosted.hookbox.org/static/hookbox.js"></script>
 	<script type="text/javascript">
 		jQuery( window ).load( function() {
+			var conn = hookbox.connect('http://jackmort.hosted.hookbox.org');
+			conn.onOpen = function() { alert("connection established!"); };
+			conn.onError = function(err) { alert("connection failed: " + err.msg); };
+
+			var subscription = null;
+			conn.onSubscribed = function(channelName, _subscription) {
+				subscription = _subscription;                
+				subscription.onPublish = function( frame ) {
+					console.log( frame )
+				};  
+			};
+			conn.subscribe( "posts" );
+
 			$wall = jQuery( '.posts' )
 			$wall.masonry({ 
 				columnWidth: 50,
