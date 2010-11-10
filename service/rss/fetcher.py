@@ -57,3 +57,6 @@ class RSSFetcher( BaseFetcher ):
 					image_url = image_url,
 					body = body
 				)
+
+				if created:
+					self.fetched( post )

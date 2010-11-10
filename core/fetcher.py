@@ -18,6 +18,7 @@
 from datetime import datetime
 
 from cumulumbus.core.utils import to_timestamp
+from cumulumbus.core.models import post_imported
 
 class BaseFetcher( object ):
 	def __init__( self, serviceAccount ):
@@ -37,3 +38,7 @@ class BaseFetcher( object ):
 
 	def fetch( self, since=None ):
 		pass
+
+	def fetched( self, post ):
+		post_imported.send( sender=self, post=post )
+

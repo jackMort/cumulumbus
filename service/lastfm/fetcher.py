@@ -88,12 +88,15 @@ class LastfmFetcher( BaseFetcher ):
 						)
 						track.save()
 					
-					LastfmFriendListen.objects.get_or_create(
+				post, created = LastfmFriendListen.objects.get_or_create(
 						account = self.serviceAccount,
 						date_added = from_timestamp( recent.timestamp ),
 						friend = friend_user,
 						track = track
 					)
+
+				if created:
+					self.fetched( post )
 
 			except pylast.WSError:
 				pass
