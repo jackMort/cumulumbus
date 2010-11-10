@@ -11,7 +11,7 @@
 			{% if object.image_url %}
 				<img src="{{ object.image_url }}" style="float: left; margin: 5px 10px;"/>
 			{% endif %}
-			{{ object.body }}
+			{{ object.body|safe }}
 		</p>
 	</div>
 </div>

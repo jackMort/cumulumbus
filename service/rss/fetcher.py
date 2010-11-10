@@ -59,4 +59,4 @@ class RSSFetcher( BaseFetcher ):
 				)
 
 				if created:
-					self.fetched( post )
+					self.fetched( entry )

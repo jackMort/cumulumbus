@@ -29,7 +29,7 @@ class BaseFetcher( object ):
 		# while import is in proggress
 		next_import = datetime.now()
 
-		last_import = to_timestamp( self.serviceAccount.last_import ) \
+		last_import = to_timestamp( self.serviceAccount.last_import ) -1000 \
 				if self.serviceAccount.last_import else None
 
 		self.fetch( last_import )

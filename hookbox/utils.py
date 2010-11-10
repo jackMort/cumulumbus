@@ -18,13 +18,13 @@ class HookboxHelper:
 			"payload" : json.dumps( payload )
 		}
 
-		return self._request( values ).read() == '[true, {}]'
+		return self._request( "%s/rest/publish" % self.url, values ).read() == '[true, {}]'
 
-	def _request( self, values ):
+	def _request( self, url, values ):
 		data = urllib.urlencode( values )
-		req = urllib2.Request( self.url, data )
+		req = urllib2.Request( url, data )
 
 		return urllib2.urlopen( req )
 
 
-hookbox_helper = HookboxHelper( settings.HOOKBOX_URL, HOOKBOX_SECRET )
+hookbox_helper = HookboxHelper( settings.HOOKBOX_URL, settings.HOOKBOX_SECRET )

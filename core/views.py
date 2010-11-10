@@ -11,20 +11,9 @@ def index( request ):
 	
 	return render_to_response( "index.html", { "items": items }, context_instance = RequestContext( request ) )
 
-def test_stomp( request ):
-	import stomp
-	import json
-
-	conn = stomp.Connection( host_and_ports = [ ('127.0.0.1', 13131314) ] ) 
-	conn.start()
-	conn.connect()
-	conn.subscribe( destination='/posts', ack='auto' )
-	
-	post = Post.objects.all()[0]
-	msg = json.dumps( { 'post': { 'id': post.id }  } )
-
-	conn.send( msg, destination='/posts' )
-	return HttpResponse( 'OK' )
+def get_by_id( request, id ):
+	post = get_object_or_404( Post, id = id )
+	return render_to_response( "post.html", { "post": post }, context_instance = RequestContext( request ) )
 
 def mark_as_readed( request, id ):
 	post = get_object_or_404( Post, id = id )
