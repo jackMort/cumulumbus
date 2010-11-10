@@ -113,6 +113,9 @@ SERVICES = (
 LASTFM_API_KEY = '09f55b97093f0710d5b3e7011a633209'
 LASTFM_API_SECRET = '123cd374125c909b4f6c3e37e8259052'
 
+HOOKBOX_URL = ''
+HOOKBOX_SECRET = ''
+
 INSTALLED_APPS = (
 	'django.contrib.admin',
 	'django.contrib.auth',
@@ -132,6 +135,7 @@ INSTALLED_APPS = (
 	'django_extensions',
 
 	'cumulumbus.core',
+	'cumulumbus.hookbox',
 
 	'cumulumbus.service.rss',
 	'cumulumbus.service.soup',
