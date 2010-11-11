@@ -1,0 +1,16 @@
+<div id="{{ post.id }}" class="post col2" style="background: #28C9D4">
+	<div class="post-header">
+		<div class="post-actions" style="float: right">
+			<a class="post-close" href="#">x</a>
+		</div>
+		<h4>{{ post.date_added }}</h4>
+	</div>
+	<div class="post-body">
+		<p>
+			{{ object.body|urlize }}
+		</p>
+	</div>
+	<div class="post-footer clear">
+		<a href="{{ object.user.get_absolute_url }}">{{ object.user.name }}</a>
+	</div>
+</div>

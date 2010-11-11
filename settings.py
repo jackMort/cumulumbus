@@ -108,6 +108,7 @@ SERVICES = (
 	'cumulumbus.service.rss.RSSService',
 	'cumulumbus.service.soup.SoupService',
 	'cumulumbus.service.lastfm.LastfmService',
+	'cumulumbus.service.twitter.TwitterService',
 )
 
 LASTFM_API_KEY = '09f55b97093f0710d5b3e7011a633209'
@@ -140,6 +141,7 @@ INSTALLED_APPS = (
 	'cumulumbus.service.rss',
 	'cumulumbus.service.soup',
 	'cumulumbus.service.lastfm',
+	'cumulumbus.service.twitter',
 )
 
 try:

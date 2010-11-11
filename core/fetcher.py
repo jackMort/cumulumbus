@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import logging
+
 from threading import Thread, Lock
 from datetime import datetime
 
@@ -25,6 +27,7 @@ class BaseFetcher( Thread ):
 	def __init__( self, serviceAccount ):
 		Thread.__init__( self )
 		self.serviceAccount = serviceAccount
+		self._logger = logging.getLogger( 'cumulumbus.fetcher.%s' % serviceAccount.service )
 
 	def run( self ):
 		lock = Lock()
@@ -46,3 +49,6 @@ class BaseFetcher( Thread ):
 	def fetched( self, post ):
 		post_imported.send( sender=self, post=post )
 
+	@property
+	def logger( self ):
+		return self._logger

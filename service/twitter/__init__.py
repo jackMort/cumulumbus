@@ -15,5 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from cumulumbus.core.servicehook_pool import servicehook_pool
-servicehook_pool.discover_services()
+from cumulumbus.core.service import Service
+
+class TwitterService( Service ):
+	name = "twitter"
+
+	def get_fetchers( self ):
+		from cumulumbus.service.twitter.fetcher import TwitterFetcher
+		return [ TwitterFetcher ]
