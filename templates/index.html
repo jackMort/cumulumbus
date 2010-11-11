@@ -5,69 +5,17 @@
 {% block title %}CUMULUMBUS - your stream in cloud.{% endblock %}
 
 {% block head_extra %}
-	<script src="{{ MEDIA_URL}}js/jquery.masonry.min.js"></script>
 	<script type="text/javascript" src="http://jackmort.hosted.hookbox.org/static/hookbox.js"></script>
-	<script type="text/javascript">
-		jQuery( window ).load( function() {
-			$wall = jQuery( '.posts' )
-			var masonry_options = {
-				columnWidth: 50,
-				itemSelector: '.post', 
-				animate: true,
-				saveOptions: false,
-				animateOptions: {
-					duration: 1000,
-					queue: false
-				}
-			};
-			var delete_post = function() {
-				var self = $( this ), id = self.attr( 'id' )
-				jQuery.get( '/readed/' + id, function( data ) {
-					// TODO: json, and messaging
-					if ( data == 'OK' ) {
-						self.remove()
-						$wall.masonry( masonry_options )
-					} else {
-						alert( 'ERROR: while processing ...' )
-					}
-				})
-			};
-
-			$wall.masonry( masonry_options )
-			
-			var make_connection = function() {
-				var conn = hookbox.connect('http://jackmort.hosted.hookbox.org');
-				// TODO: messaging ...
-				// conn.onOpen = function() { alert("connection established!"); };
-				conn.onError = function(err) { alert("connection failed: " + err.msg); };
-				conn.onClose = function() { make_connection() };
-
-				var subscription = null;
-				conn.onSubscribed = function(channelName, _subscription) {
-					subscription = _subscription;                
-					subscription.onPublish = function( frame ) {
-						id = frame['payload']['id']
-						jQuery.get( '/post/' + id, function( data ) {
-							$item = $( data )
-							$wall.append( $item )
-							$item.click( delete_post )
-							$wall.masonry( { appendedContent: $item } )
-						})
-					};  
-				};
-				conn.subscribe( "posts" );
-			}
-
-			make_connection();
-
-			// mark as readed
-			jQuery( '.post' ).click( delete_post )
-		})
-	</script>
+	<script src="{{ MEDIA_URL}}js/jquery.masonry.min.js"></script>
+	<script src="{{ MEDIA_URL}}lib/extjs/adapter/jquery/ext-jquery-adapter.js"></script>
+	<script src="{{ MEDIA_URL}}lib/extjs/ext-all.js"></script>
+	<script src="{{ MEDIA_URL}}js/cumulumbus.js"></script>
+	
+	<link rel="stylesheet" media="all" href="{{ MEDIA_URL }}lib/extjs/resources/css/ext-all.css"/>
 {% endblock %}
 
 {% block content %}
-	<div class="posts">
+	<div id="posts_content" class="posts">
 	{% for item in items %}
 		{% render_post item %}
 	{% endfor %}

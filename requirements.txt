@@ -7,4 +7,5 @@ django_extensions>=0.5
 pylast>=0.4.30
 feedparser>=4.1
 python-twitter>=0.6
+gdata>=2.0.12
 -e git+git://github.com/SmileyChris/easy-thumbnails.git#egg=easy-thumbnails
