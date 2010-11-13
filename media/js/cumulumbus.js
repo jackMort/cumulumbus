@@ -22,22 +22,22 @@ Ext.namespace(
 
 Cumulumbus.core = function() {
 	return {
+		MAX_PERPAGE: 10,
 		init: function() {
 			new Ext.Viewport({
 				layout: 'fit',
 				items: {
 					border: false,
-					contentEl: 'posts_content'
+					autoScroll: true,
+					contentEl: 'posts_content',
 				}
 			});
 
 			this.masonry();
 			
 			this.keyMap = new Ext.KeyMap( document, [
-				{ key: 'k', fn: function() { console.log( "UP" )}  }, // up
-				{ key: 'j', fn: function() { console.log( "DOWN" )} }, // down
-				{ key: 'h', fn: function() { console.log( "LEFT" )}  }, // left
-				{ key: 'l', fn: function() { console.log( "RIGHT" )}  }, // right
+				{ key: 'h', fn: this.moveSelection.createDelegate( this, [ 'r' ] )  }, // left
+				{ key: 'l', fn: this.moveSelection.createDelegate( this, [ 'l' ] )  }, // right
 			])
 			
 			this.bindActions( '#posts_content .post' )
@@ -78,8 +78,9 @@ Cumulumbus.core = function() {
 				if ( data.success ) {
 					el.fadeOut( function() {
 						el.remove();
-						self.masonry();
 						self.updateUnreadedCount( data.unreaded )
+						// fetch new parts
+						self.getParts()
 					})
 					// ..
 				}
@@ -134,65 +135,28 @@ Cumulumbus.core = function() {
 				};  
 			};
 			conn.subscribe( "posts" )
+		},
+		getParts: function() {
+			var self = this;
+			var parts = $( '.post', this.wall )
+			if( parts.length < this.MAX_PERPAGE ) {
+				var id = parts.length > 0 ? parts.last().attr( 'id' ) : 0
+				var count = this.MAX_PERPAGE - parts.length
+				jQuery.get( '/posts/fetch/' + id + '/'+ count, function( data ) {
+						if( data ) {
+							var items = $( data )
+							items.css( 'position', 'absolute' );
+							self.bindActions( items )
+							self.wall.append( items )
+						}
+						self.masonry()
+					})
+			}
+		},
+		moveSelection: function( direction ) {
+			// TODO: move selection to next/prev element
 		}
 	}
 }();
 
 Ext.onReady( Cumulumbus.core.init, Cumulumbus.core )
-/*
-		jQuery( window ).load( function() {
-			$wall = jQuery( '.posts' )
-			var masonry_options = {
-				columnWidth: 50,
-				itemSelector: '.post', 
-				animate: true,
-				saveOptions: false,
-				animateOptions: {
-					duration: 1000,
-					queue: false
-				}
-			};
-			var delete_post = function() {
-				var self = $( this ), id = self.attr( 'id' )
-				jQuery.get( '/readed/' + id, function( data ) {
-					// TODO: json, and messaging
-					if ( data == 'OK' ) {
-						self.remove()
-						$wall.masonry( masonry_options )
-					} else {
-						alert( 'ERROR: while processing ...' )
-					}
-				})
-			};
-
-			$wall.masonry( masonry_options )
-			
-			var make_connection = function() {
-				var conn = hookbox.connect('http://jackmort.hosted.hookbox.org');
-				// TODO: messaging ...
-				// conn.onOpen = function() { alert("connection established!"); };
-				conn.onError = function(err) { alert("connection failed: " + err.msg); };
-				conn.onClose = function() { make_connection() };
-
-				var subscription = null;
-				conn.onSubscribed = function(channelName, _subscription) {
-					subscription = _subscription;                
-					subscription.onPublish = function( frame ) {
-						id = frame['payload']['id']
-						jQuery.get( '/post/' + id, function( data ) {
-							$item = $( data )
-							$wall.append( $item )
-							$item.click( delete_post )
-							$wall.masonry( { appendedContent: $item } )
-						})
-					};  
-				};
-				conn.subscribe( "posts" );
-			}
-
-			make_connection();
-
-			// mark as readed
-			jQuery( '.post' ).click( delete_post )
-		})
-*/
