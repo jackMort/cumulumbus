@@ -97,9 +97,9 @@ a:hover {
 		-moz-border-radius: 5px;
 		border-radius: 5px;
 
-		-moz-box-shadow: 2px 2px 5px #eee;
-		-webkit-box-shadow: 2px 2px 5px #eee;
-		box-shadow: 2px 2px 5px #eee;
+		-moz-box-shadow: 2px 2px 5px #999;
+		-webkit-box-shadow: 2px 2px 5px #999;
+		box-shadow: 2px 2px 5px #999;
 	}
 
 .post:hover {

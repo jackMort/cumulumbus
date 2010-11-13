@@ -41,6 +41,8 @@ Cumulumbus.core = function() {
 			])
 			
 			this.bindActions( '#posts_content .post' )
+
+			this.makeConnection()
 		},
 		masonry: function() {
 			this.wall = jQuery( '#posts_content' )
@@ -72,16 +74,66 @@ Cumulumbus.core = function() {
 			var id = el.attr( 'id' )
 			var self = this
 			// ..
-			jQuery.get( '/readed/' + id, function( data ) {
-				// TODO: json, and messaging
-				if ( data == 'OK' ) {
+			jQuery.getJSON( '/readed/' + id, function( data ) {
+				if ( data.success ) {
 					el.fadeOut( function() {
 						el.remove();
 						self.masonry();
+						self.updateUnreadedCount( data.unreaded )
 					})
 					// ..
 				}
 			})
+		},
+		updateUnreadedCount: function( count ) {
+			this.titles = [
+				"CUMULUMBUS --- " + count
+			]
+			if( count > 0 && !this.animate_title ) {
+				this.animate_title = true
+				this.animateTitle()
+			} else if ( count == 0 && this.animate_title ) {
+				this.animate_title = false
+				this.animateTitle()
+			}
+		},
+		animateTitle: function() {
+			var self = this
+			if( self.animate_title ) {
+				this.title_interval = setInterval( function() {
+					var id = self.title_id < self.titles.length - 1  ? self.title_id + 1 : 0
+						document.title = self.titles[ id ]
+					self.title_id = id
+				}, 1000 )
+			} else {
+				if( self.title_interval )
+					self.title_interval.clearInterval()
+			}
+		},
+		makeConnection: function() {
+			var self = this
+
+			var conn = hookbox.connect( "http://jackmort.hosted.hookbox.org" );
+			// TODO: messaging ...
+			// conn.onOpen = function() { alert("connection established!"); };
+			conn.onError = function(err) { alert("connection failed: " + err.msg); };
+			conn.onClose = function() { self.makeConnection() };
+
+			var subscription = null;
+			conn.onSubscribed = function( channelName, _subscription ) {
+				subscription = _subscription;                
+				subscription.onPublish = function( frame ) {
+					id = frame['payload']['id']
+					jQuery.get( '/post/' + id, function( data ) {
+						var item = $( data )
+						self.bindActions( item )
+						self.wall.append( item )
+
+						self.masonry()
+					})
+				};  
+			};
+			conn.subscribe( "posts" )
 		}
 	}
 }();
