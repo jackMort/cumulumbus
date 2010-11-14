@@ -18,7 +18,7 @@ def get_by_id( request, id ):
 
 def fetch_part( request, last_id, count ):
 	last_post = get_object_or_404( Post, id = last_id )
-	posts = Post.objects.filter( date_added__gt=last_post.date_added ).order_by( 'date_added' )[:count]
+	posts = Post.objects.filter( readed = False, date_added__gt=last_post.date_added ).order_by( 'date_added' )[:count]
 	return render_to_response( "posts.html", { "posts": posts }, context_instance = RequestContext( request ) )
 
 

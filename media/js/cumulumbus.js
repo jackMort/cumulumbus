@@ -127,6 +127,7 @@ Cumulumbus.core = function() {
 					id = frame['payload']['id']
 					jQuery.get( '/post/' + id, function( data ) {
 						var item = $( data )
+						item.css( 'position', 'absolute' );
 						self.bindActions( item )
 						self.wall.append( item )
 
@@ -143,7 +144,7 @@ Cumulumbus.core = function() {
 				var id = parts.length > 0 ? parts.last().attr( 'id' ) : 0
 				var count = this.MAX_PERPAGE - parts.length
 				jQuery.get( '/posts/fetch/' + id + '/'+ count, function( data ) {
-						if( data ) {
+						if( data.length > 10 /* FIXME */ ) {
 							var items = $( data )
 							items.css( 'position', 'absolute' );
 							self.bindActions( items )
