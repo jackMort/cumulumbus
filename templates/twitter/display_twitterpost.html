@@ -1,10 +1,13 @@
 {% load twitter %}
-<div id="{{ post.id }}" class="post col2" style="background: #DEEFF6">
+<div id="{{ post.id }}" class="post col2" style="background: #9AE4E8">
 	<div class="post-header">
 		<div class="post-actions" style="float: right">
 			<a class="post-close" href="#">x</a>
 		</div>
-		<h4>{{ post.date_added }}</h4>
+		<h4>
+			<img class="service-icon" src="media/images/twitter.png" alt="[RSS]" />
+			{{ post.date_added }}
+		</h4>
 	</div>
 	<div class="post-body">
 		<p>

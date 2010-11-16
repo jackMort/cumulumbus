@@ -24,6 +24,9 @@ Cumulumbus.core = function() {
 	return {
 		MAX_PERPAGE: 10,
 		init: function() {
+			this.initialiseHistory();
+			this.wall = jQuery( '#posts_content' )
+
 			new Ext.Viewport({
 				layout: 'fit',
 				items: {
@@ -33,19 +36,20 @@ Cumulumbus.core = function() {
 				}
 			});
 
-			this.masonry();
+			//this.masonry();
 			
 			this.keyMap = new Ext.KeyMap( document, [
-				{ key: 'h', fn: this.moveSelection.createDelegate( this, [ 'r' ] )  }, // left
-				{ key: 'l', fn: this.moveSelection.createDelegate( this, [ 'l' ] )  }, // right
+				{ key: 'h', fn: this.keyAction.createDelegate( this, [ 'l' ] )  }, // left
+				{ key: 'l', fn: this.keyAction.createDelegate( this, [ 'r' ] )  }, // right
+				{ key: 'c', fn: this.keyAction.createDelegate( this, [ 'c' ] )  }, // close
 			])
 			
-			this.bindActions( '#posts_content .post' )
+			//this.bindActions( '#posts_content .post' )
+			this.getParts();
 
 			this.makeConnection()
 		},
 		masonry: function() {
-			this.wall = jQuery( '#posts_content' )
 
 			var masonry_options = {
 				columnWidth: 50,
@@ -58,8 +62,8 @@ Cumulumbus.core = function() {
 				}
 			};
 			
-			this.wall.masonry( masonry_options )
-			
+			this.wall.masonry( masonry_options );
+
 			jQuery( '.post:hidden' ).fadeIn()
 		},
 		bindActions: function( el ) {
@@ -77,6 +81,7 @@ Cumulumbus.core = function() {
 			jQuery.getJSON( '/readed/' + id, function( data ) {
 				if ( data.success ) {
 					el.fadeOut( function() {
+						self.makeSelection( el.next() )
 						el.remove();
 						self.updateUnreadedCount( data.unreaded )
 						// fetch new parts
@@ -154,8 +159,61 @@ Cumulumbus.core = function() {
 					})
 			}
 		},
-		moveSelection: function( direction ) {
-			// TODO: move selection to next/prev element
+		keyAction: function( direction ) {
+			var first = jQuery( ".post", this.wall ).first()
+			var last = jQuery( ".post", this.wall ).last()
+
+			switch( direction ) {
+				case "r": 
+					if( !this.selected || this.selected == last ) this.makeSelection( first )
+					else this.makeSelection( this.selected.next() )
+					break;
+				case "l": 
+					if( !this.selected || this.selected == first ) this.makeSelection( last );
+					else this.makeSelection( this.selected.prev() )
+					break;
+				case "c": 
+					if( this.selected ) this.closePost( this.selected );
+					break;
+			}
+		},
+		makeSelection: function( post ) {
+			jQuery( ".post.selected", this.wall ).removeClass( 'selected' )
+			// ..
+			this.selected = post;
+			this.selected.addClass( 'selected' );
+		},
+		/**
+		 * Creates the necessary DOM elements required for Ext.History to manage state
+		 * Sets up a listener on Ext.History's change event to fire this.handleHistoryChange
+		 */
+		initialiseHistory: function() {
+			this.historyForm = Ext.getBody().createChild({
+				tag: 'form', action: '#', cls: 'x-hidden', id: 'history-form',
+				children: [
+					{ tag: 'div', children: [
+						{ tag:  'input', id:   Ext.History.fieldId, type: 'hidden' },
+						{ tag:  'iframe', id:   Ext.History.iframeId }
+					]}
+				]
+			});
+
+			//initialize History management
+			Ext.History.init( 
+				this.handleHistoryChange.createDelegate( this, [document.location.hash.replace("#", "")] ) 
+			);
+			Ext.History.on('change', this.handleHistoryChange, this);
+		},
+		handleHistoryChange: function( token ) {
+			if( !token ) return;
+
+			switch( token ) {
+				case "archive": this.archive(); break;
+				default: window.location = window.location.href.split('#')[0]
+			}
+		},
+		archive: function() {
+
 		}
 	}
 }();
