@@ -27,7 +27,7 @@ Cumulumbus.core = function() {
 			this.initialiseHistory();
 			this.wall = jQuery( '#posts_content' )
 
-			new Ext.Viewport({
+			/*new Ext.Viewport({
 				layout: 'fit',
 				items: {
 					border: false,
@@ -35,6 +35,7 @@ Cumulumbus.core = function() {
 					contentEl: 'posts_content',
 				}
 			});
+			*/
 
 			//this.masonry();
 			
@@ -92,6 +93,7 @@ Cumulumbus.core = function() {
 			})
 		},
 		updateUnreadedCount: function( count ) {
+			/*
 			this.titles = [
 				"CUMULUMBUS --- " + count
 			]
@@ -101,8 +103,9 @@ Cumulumbus.core = function() {
 			} else if ( count == 0 && this.animate_title ) {
 				this.animate_title = false
 				this.animateTitle()
-			}
+			}*/
 		},
+		/*
 		animateTitle: function() {
 			var self = this
 			if( self.animate_title ) {
@@ -116,6 +119,7 @@ Cumulumbus.core = function() {
 					self.title_interval.clearInterval()
 			}
 		},
+		*/
 		makeConnection: function() {
 			var self = this
 
@@ -129,6 +133,8 @@ Cumulumbus.core = function() {
 			conn.onSubscribed = function( channelName, _subscription ) {
 				subscription = _subscription;                
 				subscription.onPublish = function( frame ) {
+					self.getParts();
+					/*
 					id = frame['payload']['id']
 					jQuery.get( '/post/' + id, function( data ) {
 						var item = $( data )
@@ -138,6 +144,7 @@ Cumulumbus.core = function() {
 
 						self.masonry()
 					})
+					*/
 				};  
 			};
 			conn.subscribe( "posts" )
