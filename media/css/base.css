@@ -127,5 +127,5 @@ a:hover {
 .post-header h4 { font-size: 11px; }
 .post p { padding: 0px 5px; text-indent: 5px; margin-top: 5px; }
 .post-header .service-icon { height: 12px; float: left; margin: 1px 2px; }
-.post-footer { text-align: right; margin-top: 3px; }
+.post-footer { text-align: right; margin-top: 3px; clear: both; }
 .post-actions { padding: 0 3px; }

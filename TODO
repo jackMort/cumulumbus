@@ -1,9 +1,10 @@
 cumulumbus.com - todo list
 ---------------------------
 
-== 2010-11-21, alpha 1
+== 2011-01-01, alpha 1
 
-  * registration( disabled on this version ), login from piston
+  * registration
+  * image storage - simple storage with thumbnails ( easy_thumbnails )
   * service management: add/edit/remove
   * usersubdomain from filmaster.pl
   * portal based on ajax extjs.history
@@ -12,13 +13,8 @@ cumulumbus.com - todo list
   * twitter, facebook, soup.io, vimeo, youtube service
   * design: post window
 
-== 2010-10-28, alpha 2
-  * user registration invitions
   * about page
-  * source post preview
-
-== 2010-12-04, beta 1
-
+  * source post, preview
 
 == future
 
