@@ -17,8 +17,32 @@
 
 
 Ext.namespace(
-	'Cumulumbus.core'
+	'Cumulumbus.core',
+	'Cumulumbus.menu'
 );
+
+Cumulumbus.menu.PerPageMenu = Ext.extend( Ext.menu.Menu, {
+	initComponent: function() {
+		this.addEvents( 'check' )
+		
+		Ext.apply( this, {
+			items: [
+				{ text: '10', group: 'perpage', checked: true, checkHandler: this.onCheck },
+				{ text: '20', group: 'perpage', checked: false, checkHandler: this.onCheck },
+				{ text: '30', group: 'perpage', checked: false, checkHandler: this.onCheck },
+				{ text: '40', group: 'perpage', checked: false, checkHandler: this.onCheck },
+				{ text: '50', group: 'perpage', checked: false, checkHandler: this.onCheck }
+			]
+		});
+
+		// ..
+		Cumulumbus.menu.PerPageMenu.superclass.initComponent.apply( this, arguments );
+	},
+	onCheck: function() {
+		alert( '1' );
+		this.fireEvent( 'check', this )
+	}
+});
 
 Cumulumbus.core = function() {
 	return {
@@ -26,16 +50,24 @@ Cumulumbus.core = function() {
 		init: function() {
 			this.initialiseHistory();
 			this.wall = jQuery( '#posts_content' )
+			
+			this.perPageMenu = new Cumulumbus.menu.PerPageMenu();
+			this.perPageMenu.on( 'check', function() {
+				alert( 'ok' )
+			})
 
-			/*new Ext.Viewport({
+			new Ext.Viewport({
 				layout: 'fit',
 				items: {
+					tbar: [ ' ',
+						{ xtype: 'textfield', width: 200, emptyText: 'search post ...' }, '->',
+						{ iconCls: 'expand-all-icon', menu: this.perPageMenu }, ' '
+					],
 					border: false,
-					autoScroll: true,
+					//autoScroll: true,
 					contentEl: 'posts_content',
 				}
 			});
-			*/
 
 			//this.masonry();
 			
@@ -48,7 +80,36 @@ Cumulumbus.core = function() {
 			//this.bindActions( '#posts_content .post' )
 			this.getParts();
 
-			this.makeConnection()
+			//this.makeConnection()
+
+			//this.initializeScroll();
+		},
+		initializeScroll: function() {
+
+			var parts = $( '.post', this.wall )
+			var id = parts.length > 0 ? parts.last().attr( 'id' ) : 0
+			var count = this.MAX_PERPAGE - parts.length
+			jQuery( '#page_nav a' ).attr( "href", '/posts/fetch/' + id + '/'+ count )
+
+			this.wall.infinitescroll({
+	        		navSelector  : '#page_nav',  // selector for the paged navigation 
+        			nextSelector : '#page_nav a',  // selector for the NEXT link (to page 2)
+				itemSelector : '.post',     // selector for all items you'll retrieve
+        			loadingImg : 'img/loader.gif',
+				donetext  : 'No more pages to load.',
+				debug: true,
+				errorCallback: function() { 
+					alert( "error callback" )
+					// fade out the error message after 2 seconds
+          				//$('#infscr-loading').animate({opacity: .8},2000).fadeOut('normal');   
+				}
+      			},
+        		// call masonry as a callback.
+        			function( newElements ) { 
+					jQuery( this ).masonry({ appendedContent: jQuery( newElements ) }); 
+					jQuery( '.post:hidden' ).fadeIn()
+				}
+      			);
 		},
 		masonry: function() {
 
@@ -56,7 +117,7 @@ Cumulumbus.core = function() {
 				columnWidth: 50,
 				itemSelector: '.post', 
 				animate: true,
-				saveOptions: false,
+				// saveOptions: false,
 				animateOptions: {
 					duration: 1000,
 					queue: false

@@ -76,8 +76,8 @@ figure img {width: 100%;}
 
 .clear { clear: both; }
 
-a { color: #999; text-decoration: none; padding: 0 2px; }
-a:hover { 
+.posts a { color: #999; text-decoration: none; padding: 0 2px; }
+.posts a:hover { 
 	color: #fff; 
 	background: #74C12A;
 		-webkit-border-radius: 2px;
@@ -85,7 +85,7 @@ a:hover {
 		border-radius: 2px; 
 }
 
-
+.posts { padding: 4px; }
 .post {
 	display: none;
 	
@@ -129,3 +129,5 @@ a:hover {
 .post-header .service-icon { height: 12px; float: left; margin: 1px 2px; }
 .post-footer { text-align: right; margin-top: 3px; clear: both; }
 .post-actions { padding: 0 3px; }
+
+.expand-all-icon { background-image: url( ../images/icons/expand-all.gif);  }
